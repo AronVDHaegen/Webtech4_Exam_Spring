@@ -33,12 +33,12 @@ public class MyServlet extends HttpServlet {
             int roll;
             if (options.count > 0) {
                 roll = Random.nextInt(options.count);
-                request = options[roll];
+                request.setAttribute("message",options[roll]);
                 ImaginaryRedisDB.add(options[roll]);
                 options.remove(roll);
             } else {
                 roll = Random.nextInt(ImaginaryRedisDB.count);
-                request = ImaginaryRedisDB[roll];
+                request.setAttribute("message", ImaginaryRedisDB[roll]);
             }
         }
         request.getRequestDispatcher("/WebApp/result.jsp").forward(request, response);
