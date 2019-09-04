@@ -31,14 +31,22 @@ public class MyServlet extends HttpServlet {
         if (request.getParameter("btnRoll") != null) {
             Random r = new Random();
             int roll;
-            if (options.count > 0) {
+            if (ImaginaryRedisDB.Contains(request.getParameter("btnRoll"))) {
+                String message;
+                for (string record: ImaginaryRedisDB) {
+                    if (record.Contains(request.getParameter("btnRoll"))){
+                        message = record.Split(';')[1];
+                    }
+                }
+                request.setAttribute("message", message)
+            } else if (options.count > 0) {
                 roll = Random.nextInt(options.count);
                 request.setAttribute("message",options[roll]);
-                ImaginaryRedisDB.add(options[roll]);
+                ImaginaryRedisDB.add(String.concat(request.getParameter("btnRoll"), "; ", options[roll]));
                 options.remove(roll);
             } else {
                 roll = Random.nextInt(ImaginaryRedisDB.count);
-                request.setAttribute("message", ImaginaryRedisDB[roll]);
+                request.setAttribute("message", ImaginaryRedisDB[roll].Split(';')[1]);
             }
         }
         request.getRequestDispatcher("/WebApp/result.jsp").forward(request, response);
